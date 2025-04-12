@@ -33,7 +33,7 @@ public class PlatformController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UploadPlatformsFromFile(IFormFile file)
+    public async Task<IActionResult> UploadPlatformsFromFile(IFormFile file, CancellationToken cancellationToken)
     {
         if (file == null || file.Length == 0)
             return BadRequest("Файл не указан");
@@ -47,7 +47,7 @@ public class PlatformController : ControllerBase
         {
             while (!reader.EndOfStream)
             {
-                var line = await reader.ReadLineAsync();
+                var line = await reader.ReadLineAsync(cancellationToken);
                 if (!string.IsNullOrWhiteSpace(line))
                     lines.Add(line);
             }
